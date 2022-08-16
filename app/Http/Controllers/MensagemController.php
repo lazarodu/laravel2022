@@ -101,9 +101,13 @@ class MensagemController extends Controller
         if ($validated) {
             $mensagem->titulo = $request->get('titulo');
             $mensagem->mensagem = $request->get('mensagem');
-            $name = $request->file('imagem')->getClientOriginalName();
-            $path = $request->file('imagem')->storeAs("public/img", $name);
-            $mensagem->imagem = $path;
+            // $name = $request->file('imagem')->getClientOriginalName();
+            // $path = $request->file('imagem')->storeAs("public/img", $name);
+            // $mensagem->imagem = $path;
+            $path = $request->file('imagem')->store('', 's3');
+            Storage::disk('s3')->setVisibility($path, 'public');
+            $url = Storage::disk('s3')->url($path);
+            $mensagem->imagem = $url;
             $mensagem->save();
             $mensagem->topicos()->sync($request->get('topico'));
             return redirect('mensagem');
