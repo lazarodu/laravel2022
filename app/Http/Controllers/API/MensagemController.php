@@ -34,8 +34,7 @@ class MensagemController extends Controller
         $validated = $request->validate([
             'titulo' => 'required|max:255',
             'mensagem' => 'required|max:255',
-            'topico' => 'array|exists:App\Models\Topico,id',
-            'imagem' => 'required'
+            'topico' => 'array|exists:App\Models\Topico,id'
         ]);
         if ($validated) {
             try {
@@ -43,10 +42,12 @@ class MensagemController extends Controller
                 $mensagem->user_id = Auth::user()->id;
                 $mensagem->titulo = $request->get('titulo');
                 $mensagem->mensagem = $request->get('mensagem');
-                $image_base64 = base64_decode($request->get('imagem'));
-                Storage::disk('s3')->put($request->get('file'), $image_base64, 'public');
-                $path = Storage::disk('s3')->url($request->get('file'));
-                $mensagem->imagem = $path;
+                if ($request->get('imagem')) {
+                    $image_base64 = base64_decode($request->get('imagem'));
+                    Storage::disk('s3')->put($request->get('file'), $image_base64, 'public');
+                    $path = Storage::disk('s3')->url($request->get('file'));
+                    $mensagem->imagem = $path;
+                }
                 $mensagem->save();
                 $mensagem->topicos()->attach($request->get('topico'));
                 return $this->success($mensagem);
@@ -65,7 +66,7 @@ class MensagemController extends Controller
     public function show($id)
     {
         try {
-            $mensagem = Mensagem::where('id', $id)->with('topico')->get();
+            $mensagem = Mensagem::where('id', $id)->with('topicos')->get();
             return $this->success($mensagem[0]);
         } catch (\Throwable $th) {
             return $this->error("Mensagem não encontrada!!!", 401, $th->getMessage());
