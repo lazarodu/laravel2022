@@ -30,7 +30,6 @@
                 @endif
             </td>
             <td>
-                <!-- <img src="{{Storage::url($mensagem->imagem)}}" alt="{{$mensagem->titulo}}" class="showImg" /> -->
                 <img src="{{$mensagem->imagem}}" alt="{{$mensagem->titulo}}" class="showImg" />
             </td>
             <td>

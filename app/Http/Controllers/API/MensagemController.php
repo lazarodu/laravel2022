@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mensagem;
+use App\Models\Topico;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,9 @@ class MensagemController extends Controller
      */
     public function index()
     {
-        $mensagens = Mensagem::all();
+        $mensagens = Mensagem::select(['id', 'titulo', 'mensagem', 'imagem', 'created_at', 'user_id'])
+            ->with(['topicos:id,topico', 'user:id,name'])
+            ->get();
         return $this->success($mensagens);
     }
 
@@ -34,7 +37,9 @@ class MensagemController extends Controller
         $validated = $request->validate([
             'titulo' => 'required|max:255',
             'mensagem' => 'required|max:255',
-            'topico' => 'array|exists:App\Models\Topico,id'
+            'topico' => 'required|array|exists:App\Models\Topico,id',
+            'imagem' => 'required',
+            'file' => 'required',
         ]);
         if ($validated) {
             try {
