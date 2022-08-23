@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mensagem;
-use App\Models\Topico;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,13 +14,13 @@ class MensagemController extends Controller
     use ApiResponse;
     /**
      * Display a listing of the resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $mensagens = Mensagem::select(['id', 'titulo', 'mensagem', 'imagem', 'created_at', 'user_id'])
             ->with(['topicos:id,topico', 'user:id,name'])
+            ->orderBy('created_at', 'DESC')
             ->get();
         return $this->success($mensagens);
     }
