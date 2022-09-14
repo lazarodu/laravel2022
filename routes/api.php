@@ -20,12 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get("mensagem", [MensagemController::class, 'index']);
-Route::get("topico", [MensagemController::class, 'index']);
+// Route::get("topico", [MensagemController::class, 'index']);
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
-    Route::resource("topico", TopicoController::class)->except("index");
+    Route::resource("topico", TopicoController::class);
     Route::resource("mensagem", MensagemController::class)->except("index");
 });
