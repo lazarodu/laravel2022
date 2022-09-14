@@ -46,8 +46,12 @@ class MensagemController extends Controller
                 $mensagem->mensagem = $request->get('mensagem');
                 if ($request->get('imagem')) {
                     $image_base64 = base64_decode($request->get('imagem'));
-                    Storage::disk('s3')->put($request->get('file'), $image_base64, 'public');
-                    $path = Storage::disk('s3')->url($request->get('file'));
+                    // s3
+                    // Storage::disk('s3')->put($request->get('file'), $image_base64, 'public');
+                    // $path = Storage::disk('s3')->url($request->get('file'));
+                    // google
+                    Storage::disk('google')->put($request->get('file'), $image_base64, 'public');
+                    $path = Storage::disk('google')->url($request->get('file'));
                     $mensagem->imagem = $path;
                 }
                 $mensagem->save();
@@ -100,8 +104,12 @@ class MensagemController extends Controller
                 }
                 if ($request->get('imagem')) {
                     $image_base64 = base64_decode($request->get('imagem'));
-                    Storage::disk('s3')->put($request->get('file'), $image_base64, 'public');
-                    $path = Storage::disk('s3')->url($request->get('file'));
+                    // s3
+                    // Storage::disk('s3')->put($request->get('file'), $image_base64, 'public');
+                    // $path = Storage::disk('s3')->url($request->get('file'));
+                    // google
+                    Storage::disk('google')->put($request->get('file'), $image_base64, 'public');
+                    $path = Storage::disk('google')->url($request->get('file'));
                     $mensagem->imagem = $path;
                 }
                 $mensagem->save();

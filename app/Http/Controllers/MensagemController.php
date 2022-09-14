@@ -53,9 +53,14 @@ class MensagemController extends Controller
             $mensagem->mensagem = $request->get('mensagem');
             // $name = $request->file('imagem')->getClientOriginalName();
             // $path = $request->file('imagem')->storeAs("public/img", $name);
-            $name = $request->file('imagem')->store('', 's3');
-            Storage::disk('s3')->setVisibility($name, 'public');
-            $path = Storage::disk('s3')->url($name);
+            // s3
+            // $name = $request->file('imagem')->store('', 's3');
+            // Storage::disk('s3')->setVisibility($name, 'public');
+            // $path = Storage::disk('s3')->url($name);
+            // google
+            $name = $request->file('imagem')->store('', 'google');
+            Storage::disk('google')->setVisibility($name, 'public');
+            $path = Storage::disk('google')->url($name);
             $mensagem->imagem = $path;
             $mensagem->save();
             $mensagem->topicos()->attach($request->get('topico'));
@@ -106,9 +111,14 @@ class MensagemController extends Controller
             $mensagem->mensagem = $request->get('mensagem');
             // $name = $request->file('imagem')->getClientOriginalName();
             // $path = $request->file('imagem')->storeAs("public/img", $name);
-            $name = $request->file('imagem')->store('', 's3');
-            Storage::disk('s3')->setVisibility($name, 'public');
-            $path = Storage::disk('s3')->url($name);
+            // s3
+            // $name = $request->file('imagem')->store('', 's3');
+            // Storage::disk('s3')->setVisibility($name, 'public');
+            // $path = Storage::disk('s3')->url($name);
+            // google
+            $name = $request->file('imagem')->store('', 'google');
+            Storage::disk('google')->setVisibility($name, 'public');
+            $path = Storage::disk('google')->url($name);
             $mensagem->imagem = $path;
             $mensagem->save();
             $mensagem->topicos()->sync($request->get('topico'));
